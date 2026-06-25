@@ -28,14 +28,15 @@ experiences = [
     ] },
   { slug: "taproot", position: 3, role: "Lead Engineer", company: "Taproot Foundation",
     monogram: "T", logo_domain: "taprootfoundation.org", year_label: "2019 — 2023",
-    location: "New York, USA", lat: 40.7128, lon: -74.0060,
-    summary: "Led platform engineering and DevOps while making data tell stories through visualization.",
+    location: "Remote · New York, USA", lat: 40.7128, lon: -74.0060,
+    summary: "Led platform engineering and DevOps while making data tell stories through visualization — a fully remote role with the New York–based nonprofit.",
     stack: ["Ruby on Rails", "D3.js", "DevOps", "Search", "Data Analysis"],
     highlights: [
       "Maintained the platform and shipped new features; facilitated partner integrations.",
       "Owned server administration and DevOps operations.",
       "Specialized in data visualization with D3.js; optimized search to improve UX.",
-      "Analyzed data to find bottlenecks and surface insights."
+      "Analyzed data to find bottlenecks and surface insights.",
+      "Worked fully remote across time zones with the New York team."
     ] },
   { slug: "andela", position: 4, role: "Senior Consultant", company: "Andela",
     monogram: "A", logo_domain: "andela.com", year_label: "2018 — 2022",
