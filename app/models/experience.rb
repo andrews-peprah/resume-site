@@ -9,10 +9,10 @@ class Experience < ApplicationRecord
   end
 
   def previous_experience
-    self.class.where("position < ?", position).order(position: :desc).first
+    self.class.where("position < ?", position).reorder(position: :desc).first
   end
 
   def next_experience
-    self.class.where("position > ?", position).order(:position).first
+    self.class.where("position > ?", position).reorder(position: :asc).first
   end
 end
