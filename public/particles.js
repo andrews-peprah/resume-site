@@ -72,10 +72,10 @@
 
     // Portrait region: upper-right on wide screens (clear of the cards below).
     const wide = W > H * 1.05;
-    const boxW = (wide ? 0.42 : 0.8) * W;
-    const boxH = (wide ? 0.62 : 0.5) * H;
+    const boxW = (wide ? 0.40 : 0.74) * W;
+    const boxH = (wide ? 0.50 : 0.44) * H;
     const cxr = wide ? 0.77 : 0.5;
-    const cyr = wide ? 0.40 : 0.34;
+    const cyr = wide ? 0.34 : 0.30;
     const scale = Math.min(boxW / cols, boxH / rows);
     const ox = W * cxr - (cols * scale) / 2;
     const oy = H * cyr - (rows * scale) / 2;
