@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 8.0.4"
+gem "rails", "~> 8.1.3"
 # SQLite database — file-backed, persisted in a Docker volume
 gem "sqlite3", ">= 2.1"
 # Slim templates
