@@ -1,8 +1,8 @@
 /* Particle portrait — assembles /face.jpg out of fine particles across the hero.
    - Cursor: particles scatter and reform.
    - Click (anywhere in the hero that isn't a link): explode outward, then reassemble.
-   Drops the photo's background color so only the subject becomes particles.
-   Self-contained, no libraries. Duotone (navy → gold). */
+   Removes only the OUTER background (flood-fill from the edges) so the subject
+   stays solid — no holes in the face or shirt. Duotone (navy → gold). */
 (function () {
   const canvas = document.getElementById("face");
   if (!canvas) return;
@@ -40,11 +40,35 @@
     octx.drawImage(img, 0, 0, cols, rows);
     const data = octx.getImageData(0, 0, cols, rows).data;
 
-    // Background = average of the top corners; drop pixels close to it.
+    // Background colour ≈ average of the corners.
     const at = (ix, iy) => { const i = (iy * cols + ix) * 4; return [data[i], data[i + 1], data[i + 2]]; };
-    const c1 = at(0, 0), c2 = at(cols - 1, 0), c3 = at(2, 2), c4 = at(cols - 3, 2);
-    const bg = [0, 1, 2].map(j => (c1[j] + c2[j] + c3[j] + c4[j]) / 4);
-    const tol2 = 46 * 46;
+    const cs = [at(0, 0), at(cols - 1, 0), at(0, rows - 1), at(cols - 1, rows - 1)];
+    const bg = [0, 1, 2].map(j => (cs[0][j] + cs[1][j] + cs[2][j] + cs[3][j]) / 4);
+    const tol2 = 58 * 58;
+
+    // Flood-fill from the edges: only background CONNECTED to the border is removed,
+    // so light pixels inside the subject (shirt whites, highlights) are kept.
+    const N = cols * rows;
+    const seen = new Uint8Array(N), isBg = new Uint8Array(N), stack = [];
+    const nearBg = idx => {
+      const i = idx * 4;
+      if (data[i + 3] < 128) return true;
+      const dr = data[i] - bg[0], dg = data[i + 1] - bg[1], db = data[i + 2] - bg[2];
+      return dr * dr + dg * dg + db * db < tol2;
+    };
+    const push = (x, y) => {
+      if (x < 0 || y < 0 || x >= cols || y >= rows) return;
+      const idx = y * cols + x; if (seen[idx]) return; seen[idx] = 1; stack.push(idx);
+    };
+    for (let x = 0; x < cols; x++) { push(x, 0); push(x, rows - 1); }
+    for (let y = 0; y < rows; y++) { push(0, y); push(cols - 1, y); }
+    while (stack.length) {
+      const idx = stack.pop();
+      if (!nearBg(idx)) continue;
+      isBg[idx] = 1;
+      const x = idx % cols, y = (idx / cols) | 0;
+      push(x + 1, y); push(x - 1, y); push(x, y + 1); push(x, y - 1);
+    }
 
     // Portrait region: upper-right on wide screens (clear of the cards below).
     const wide = W > H * 1.05;
@@ -60,16 +84,14 @@
     particles = [];
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
-        const i = (y * cols + x) * 4;
+        const idx = y * cols + x;
+        if (isBg[idx]) continue;
+        const i = idx * 4;
         if (data[i + 3] < 128) continue;
-        const r = data[i], g = data[i + 1], b = data[i + 2];
-        const dr = r - bg[0], dg = g - bg[1], db = b - bg[2];
-        if (dr * dr + dg * dg + db * db < tol2) continue;   // drop background colour
-        if ((r + g + b) / 3 > 247) continue;                // and any pure white
         particles.push({
           x: Math.random() * W, y: Math.random() * H,
           tx: ox + x * scale, ty: oy + y * scale,
-          vx: 0, vy: 0, r: dot, delay: 0, c: duotone(r, g, b)
+          vx: 0, vy: 0, r: dot, delay: 0, c: duotone(data[i], data[i + 1], data[i + 2])
         });
       }
     }
