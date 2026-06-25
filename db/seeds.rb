@@ -6,13 +6,14 @@
 experiences = [
   { slug: "positrace", position: 1, role: "Senior Software Engineer", company: "PosiTrace",
     monogram: "P", logo_domain: "positrace.com", year_label: "2024 — Present",
-    location: "Guadalajara, Mexico", lat: 20.6597, lon: -103.3496,
-    summary: "Building features for a multi-tenant vehicle-tracking platform and turning big data into reports people actually use.",
+    location: "Burnaby, BC, Canada", lat: 49.2488, lon: -122.9805,
+    summary: "Building features for a multi-tenant vehicle-tracking platform and turning big data into reports people actually use. I started at the Guadalajara office and was relocated by the company to the Vancouver-area office in Burnaby.",
     stack: ["Ruby on Rails", "Angular", "TypeScript", "PostgreSQL", "Elasticsearch", "Big Data"],
     highlights: [
       "Build and maintain features for a multi-tenant vehicle-tracking platform, improving functionality and UX.",
       "Generate data-driven reports leveraging big-data technologies.",
-      "Troubleshoot and resolve issues to keep the platform stable and performant."
+      "Troubleshoot and resolve issues to keep the platform stable and performant.",
+      "Spent the first year at the Guadalajara, Mexico office, then relocated with the company to Burnaby, BC, Canada."
     ] },
   { slug: "defined-ai", position: 2, role: "Software Engineer", company: "Defined.ai",
     monogram: "d.", logo_domain: "defined.ai", year_label: "2021 — 2024",
