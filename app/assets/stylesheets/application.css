@@ -70,7 +70,7 @@ main { position:relative; z-index:1; }
 .xp-row:hover .yr { color:var(--accent); }
 
 /* EXPERIENCE detail */
-.xp-detail { display:grid; grid-template-columns:1fr 420px; gap:50px; align-items:start; padding-bottom:90px; }
+.xp-detail { display:grid; grid-template-columns:1fr 420px; gap:50px; align-items:start; padding-top:130px; padding-bottom:90px; }
 .xp-main { min-width:0; }
 .back { font-family:var(--mono); font-size:13px; color:var(--text-dim); }
 .back:hover { color:var(--accent); }
@@ -93,7 +93,7 @@ main { position:relative; z-index:1; }
 .pager .nm { font-size:18px; font-weight:700; color:var(--text-dim); transition:.2s; }
 .pager a:hover .nm { color:var(--accent); }
 .pager .next { text-align:right; align-items:flex-end; }
-.globe-panel { position:sticky; top:104px; display:flex; flex-direction:column; align-items:center; gap:16px; padding-top:130px; }
+.globe-panel { position:sticky; top:104px; display:flex; flex-direction:column; align-items:center; gap:16px; }
 .globe-panel canvas { width:100%; max-width:380px; aspect-ratio:1; display:block; }
 .loc-pill { font-family:var(--mono); font-size:13px; color:var(--accent-ink); border:1px solid rgba(211,154,74,.3); background:rgba(211,154,74,.06); border-radius:99px; padding:9px 18px; letter-spacing:.04em; }
 .loc-pill b { color:var(--text); }
@@ -167,5 +167,5 @@ footer a { color:var(--accent-ink); }
 @view-transition { navigation:auto; }
 
 @media (prefers-reduced-motion:reduce){ .rise{opacity:1;transform:none;animation:none} .bar i{width:var(--w);animation:none} .ticker .track{animation:none} }
-@media (max-width:960px){ .xp-detail{ grid-template-columns:1fr; gap:10px; } .globe-panel{ position:static; order:-1; padding-top:120px; } .globe-panel canvas{ max-width:240px; } .co-row{ margin-top:14px; } }
+@media (max-width:960px){ .xp-detail{ grid-template-columns:1fr; gap:10px; } .globe-panel{ position:static; order:-1; } .globe-panel canvas{ max-width:240px; } .co-row{ margin-top:14px; } }
 @media (max-width:640px){ nav .links a{ padding:7px 9px; } .xp-row{ grid-template-columns:34px 1fr; } .xp-row .yr{ grid-column:2; } }
