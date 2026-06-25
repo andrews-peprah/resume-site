@@ -81,6 +81,13 @@
     const oy = H * cyr - (rows * scale) / 2;
     const dot = Math.max(0.8 * DPR, scale * 0.62);
 
+    // park the click hint just below the portrait
+    const hint = document.querySelector(".face-hint");
+    if (hint) {
+      hint.style.left = ((ox + cols * scale / 2) / DPR) + "px";
+      hint.style.top = ((oy + rows * scale) / DPR + 16) + "px";
+    }
+
     particles = [];
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
@@ -147,6 +154,9 @@
   host.addEventListener("pointermove", e => { mouse.active = true; rel(e.clientX, e.clientY); });
   host.addEventListener("pointerleave", () => { mouse.active = false; mouse.x = mouse.y = -1e4; });
   host.addEventListener("click", e => { if (e.target.closest("a")) return; explode(e.clientX, e.clientY); });
+
+  // reveal the click hint after 5s on the page (unless already exploded)
+  setTimeout(() => { const h = document.querySelector(".face-hint"); if (h && !hintGone) h.classList.add("show"); }, 5000);
 
   let rt = null;
   window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (img.complete && img.naturalWidth) build(); }, 200); });
