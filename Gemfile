@@ -12,7 +12,7 @@ gem "puma", ">= 5.0"
 
 # Markdown rendering for blog posts + syntax highlighting
 gem "redcarpet", "~> 3.6"
-gem "rouge", "~> 4.2"
+gem "rouge", "~> 5.0"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
