@@ -1,0 +1,50 @@
+# Updated home-server stack (greywolf) — replaces the WordPress + MariaDB
+# services with the Rails site. Keep your existing tailscale service & volume
+# so the node keeps its identity (100.64.0.2).
+#
+# Place this at ~/local/docker-compose.local.yml and clone the repo alongside it:
+#   cd ~/local
+#   git clone git@github.com:andrews-peprah/resume-site.git
+#   # build context below points at ./resume-site
+#
+# Then:  docker compose -f docker-compose.local.yml up -d --build
+
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale-local
+    hostname: local-machine
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false                       # kernel TUN — real tailscale0 (already set)
+      - TS_EXTRA_ARGS=--login-server=https://headscale.${HEADSCALE_DOMAIN}
+    volumes:
+      - tailscale-state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    cap_add: [NET_ADMIN, SYS_MODULE]
+    networks: [tailscale-net]
+    restart: unless-stopped
+
+  site:
+    build: ./resume-site                         # cloned repo dir
+    image: resume-site:latest
+    container_name: resume-site
+    network_mode: "service:tailscale"            # shares the tailnet namespace
+    environment:
+      - RAILS_ENV=production
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}       # set in ~/local/.env
+      - RAILS_LOG_TO_STDOUT=1
+      - RAILS_SERVE_STATIC_FILES=1               # Rails serves its own assets (no nginx in-container)
+    depends_on: [tailscale]
+    restart: unless-stopped
+
+networks:
+  tailscale-net:
+    driver: bridge
+
+volumes:
+  tailscale-state:
+  # The old WordPress volumes are intentionally left out of the active stack.
+  # They are NOT deleted — keep them until you're satisfied, then prune:
+  #   docker volume rm local_wp-data local_db-data
