@@ -1,10 +1,12 @@
-/* Particle portrait — assembles /face.jpg out of fine particles.
+/* Particle portrait — assembles /face.jpg out of fine particles across the whole hero.
    - Move the cursor: particles scatter and reform.
-   - Click: the portrait explodes outward, then reassembles little by little.
+   - Click (anywhere in the hero that isn't a link): the portrait explodes outward
+     across the hero, then reassembles little by little.
    Self-contained, no libraries. Duotone (navy → gold) to match the site. */
 (function () {
   const canvas = document.getElementById("face");
   if (!canvas) return;
+  const host = canvas.closest(".hero") || canvas.parentElement;
   const ctx = canvas.getContext("2d");
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -38,8 +40,16 @@
     octx.drawImage(img, 0, 0, cols, rows);
     const data = octx.getImageData(0, 0, cols, rows).data;
 
-    const scale = Math.min(W / cols, H / rows) * 0.96;
-    const ox = (W - cols * scale) / 2, oy = (H - rows * scale) / 2;
+    // Place the portrait in a region of the (large) hero canvas: right side on
+    // wide screens, upper-centre on narrow ones. Particles can fly the full canvas.
+    const wide = W > H * 1.05;
+    const boxW = (wide ? 0.46 : 0.86) * W;
+    const boxH = (wide ? 0.88 : 0.6) * H;
+    const cxr = wide ? 0.74 : 0.5;
+    const cyr = wide ? 0.5 : 0.4;
+    const scale = Math.min(boxW / cols, boxH / rows);
+    const ox = W * cxr - (cols * scale) / 2;
+    const oy = H * cyr - (rows * scale) / 2;
     const dot = Math.max(0.8 * DPR, scale * 0.62);
 
     particles = [];
@@ -67,17 +77,8 @@
     for (let n = 0; n < particles.length; n++) {
       const p = particles[n];
       if (!reduce) {
-        if (p.delay > 0) {
-          // explosion / fly-around phase: drift with light drag, no spring yet
-          p.delay -= 1;
-          p.vx *= 0.965; p.vy *= 0.965;
-        } else {
-          // spring home
-          p.vx += (p.tx - p.x) * k;
-          p.vy += (p.ty - p.y) * k;
-          p.vx *= fr; p.vy *= fr;
-        }
-        // cursor repulsion (always on)
+        if (p.delay > 0) { p.delay -= 1; p.vx *= 0.97; p.vy *= 0.97; }
+        else { p.vx += (p.tx - p.x) * k; p.vy += (p.ty - p.y) * k; p.vx *= fr; p.vy *= fr; }
         if (mouse.active) {
           const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
           if (d2 < rad2 && d2 > 0.01) {
@@ -101,21 +102,21 @@
       const p = particles[n];
       let dx = p.x - cx, dy = p.y - cy;
       const d = Math.hypot(dx, dy) || 1;
-      const force = 20 + Math.random() * 28;          // outward blast
-      const spin = (Math.random() - 0.5) * 14;         // a little chaos so they fly around
+      const force = 26 + Math.random() * 40;
+      const spin = (Math.random() - 0.5) * 20;
       p.vx += (dx / d) * force - (dy / d) * spin;
       p.vy += (dy / d) * force + (dx / d) * spin;
-      p.delay = 14 + Math.random() * 78;               // staggered → reassemble little by little
+      p.delay = 16 + Math.random() * 90;
     }
   }
 
-  function toCanvas(cx, cy) {
+  function rel(cx, cy) {
     const rect = canvas.getBoundingClientRect();
     mouse.x = (cx - rect.left) * DPR; mouse.y = (cy - rect.top) * DPR;
   }
-  canvas.addEventListener("pointermove", e => { mouse.active = true; toCanvas(e.clientX, e.clientY); });
-  canvas.addEventListener("pointerleave", () => { mouse.active = false; mouse.x = mouse.y = -1e4; });
-  canvas.addEventListener("click", e => explode(e.clientX, e.clientY));
+  host.addEventListener("pointermove", e => { mouse.active = true; rel(e.clientX, e.clientY); });
+  host.addEventListener("pointerleave", () => { mouse.active = false; mouse.x = mouse.y = -1e4; });
+  host.addEventListener("click", e => { if (e.target.closest("a")) return; explode(e.clientX, e.clientY); });
 
   let rt = null;
   window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (img.complete && img.naturalWidth) build(); }, 200); });
