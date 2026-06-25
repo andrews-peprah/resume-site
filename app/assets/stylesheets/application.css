@@ -38,6 +38,11 @@ main { position:relative; z-index:1; }
 .hero h1 { font-size:clamp(54px,11vw,160px); line-height:.92; letter-spacing:-.03em; font-weight:800; margin:0; background:linear-gradient(180deg,#fff 30%,#b9c6d8); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .hero .sub { font-size:clamp(18px,2.4vw,26px); color:var(--text-dim); margin:26px 0 0; max-width:32ch; font-weight:500; }
 .hero .sub b { color:var(--text); font-weight:700; }
+.hero-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:48px; align-items:center; }
+.hero-copy h1 { font-size:clamp(46px,7.5vw,104px); }
+.hero-face { display:flex; justify-content:flex-end; }
+.hero-face canvas { width:100%; max-width:480px; aspect-ratio:1; display:block; cursor:crosshair; }
+@media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; gap:18px; } .hero-face{ order:-1; justify-content:center; } .hero-face canvas{ max-width:260px; } }
 .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:54px; max-width:920px; }
 .card { position:relative; padding:24px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.01)); overflow:hidden; transition:transform .25s cubic-bezier(.2,.7,.3,1),border-color .25s; }
 .card:hover { transform:translateY(-4px); border-color:rgba(211,154,74,.5); }

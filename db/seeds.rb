@@ -17,7 +17,7 @@ experiences = [
     ] },
   { slug: "defined-ai", position: 2, role: "Software Engineer", company: "Defined.ai",
     monogram: "d.", logo_domain: "defined.ai", year_label: "2021 — 2024",
-    location: "Lisbon, Portugal", lat: 38.7223, lon: -9.1393,
+    location: "Porto, Portugal", lat: 41.1579, lon: -8.6291,
     summary: "Microservice backends and fully automated delivery pipelines powering crowd-sourced data collection for machine learning.",
     stack: ["C# / .NET", "React", "Prometheus", "Grafana", "Kibana", "Elasticsearch", "CI/CD"],
     highlights: [
