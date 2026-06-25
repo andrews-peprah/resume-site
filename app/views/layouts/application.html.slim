@@ -12,7 +12,7 @@ html lang="en"
     = stylesheet_link_tag "application"
     style
       ==rouge_css
-  body
+  body data-page="#{controller_name}/#{action_name}"
     .glow.a
     .glow.b
     nav.bar
@@ -29,3 +29,4 @@ html lang="en"
       script src="/globe.js" defer="defer"
     - if controller_name == "pages" && action_name == "home"
       script src="/particles.js" defer="defer"
+    script src="/tour.js" defer="defer"

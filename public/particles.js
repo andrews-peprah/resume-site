@@ -1,8 +1,8 @@
-/* Particle portrait — assembles /face.jpg out of fine particles across the whole hero.
-   - Move the cursor: particles scatter and reform.
-   - Click (anywhere in the hero that isn't a link): the portrait explodes outward
-     across the hero, then reassembles little by little.
-   Self-contained, no libraries. Duotone (navy → gold) to match the site. */
+/* Particle portrait — assembles /face.jpg out of fine particles across the hero.
+   - Cursor: particles scatter and reform.
+   - Click (anywhere in the hero that isn't a link): explode outward, then reassemble.
+   Drops the photo's background color so only the subject becomes particles.
+   Self-contained, no libraries. Duotone (navy → gold). */
 (function () {
   const canvas = document.getElementById("face");
   if (!canvas) return;
@@ -11,7 +11,7 @@
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  let W = 0, H = 0, particles = [], raf = null;
+  let W = 0, H = 0, particles = [], raf = null, hintGone = false;
   const mouse = { x: -1e4, y: -1e4, active: false };
 
   const img = new Image();
@@ -40,13 +40,18 @@
     octx.drawImage(img, 0, 0, cols, rows);
     const data = octx.getImageData(0, 0, cols, rows).data;
 
-    // Place the portrait in a region of the (large) hero canvas: right side on
-    // wide screens, upper-centre on narrow ones. Particles can fly the full canvas.
+    // Background = average of the top corners; drop pixels close to it.
+    const at = (ix, iy) => { const i = (iy * cols + ix) * 4; return [data[i], data[i + 1], data[i + 2]]; };
+    const c1 = at(0, 0), c2 = at(cols - 1, 0), c3 = at(2, 2), c4 = at(cols - 3, 2);
+    const bg = [0, 1, 2].map(j => (c1[j] + c2[j] + c3[j] + c4[j]) / 4);
+    const tol2 = 46 * 46;
+
+    // Portrait region: upper-right on wide screens (clear of the cards below).
     const wide = W > H * 1.05;
-    const boxW = (wide ? 0.46 : 0.86) * W;
-    const boxH = (wide ? 0.88 : 0.6) * H;
-    const cxr = wide ? 0.74 : 0.5;
-    const cyr = wide ? 0.5 : 0.4;
+    const boxW = (wide ? 0.42 : 0.8) * W;
+    const boxH = (wide ? 0.62 : 0.5) * H;
+    const cxr = wide ? 0.77 : 0.5;
+    const cyr = wide ? 0.40 : 0.34;
     const scale = Math.min(boxW / cols, boxH / rows);
     const ox = W * cxr - (cols * scale) / 2;
     const oy = H * cyr - (rows * scale) / 2;
@@ -58,7 +63,9 @@
         const i = (y * cols + x) * 4;
         if (data[i + 3] < 128) continue;
         const r = data[i], g = data[i + 1], b = data[i + 2];
-        if ((r + g + b) / 3 > 240) continue;
+        const dr = r - bg[0], dg = g - bg[1], db = b - bg[2];
+        if (dr * dr + dg * dg + db * db < tol2) continue;   // drop background colour
+        if ((r + g + b) / 3 > 247) continue;                // and any pure white
         particles.push({
           x: Math.random() * W, y: Math.random() * H,
           tx: ox + x * scale, ty: oy + y * scale,
@@ -108,6 +115,7 @@
       p.vy += (dy / d) * force + (dx / d) * spin;
       p.delay = 16 + Math.random() * 90;
     }
+    if (!hintGone) { hintGone = true; const h = document.querySelector(".face-hint"); if (h) h.classList.add("gone"); }
   }
 
   function rel(cx, cy) {
