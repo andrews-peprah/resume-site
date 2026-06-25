@@ -151,9 +151,9 @@
     const rect = canvas.getBoundingClientRect();
     mouse.x = (cx - rect.left) * DPR; mouse.y = (cy - rect.top) * DPR;
   }
-  host.addEventListener("pointermove", e => { mouse.active = true; rel(e.clientX, e.clientY); });
-  host.addEventListener("pointerleave", () => { mouse.active = false; mouse.x = mouse.y = -1e4; });
-  host.addEventListener("click", e => { if (e.target.closest("a")) return; explode(e.clientX, e.clientY); });
+  // full-viewport interaction (canvas spans the whole screen)
+  window.addEventListener("pointermove", e => { mouse.active = true; rel(e.clientX, e.clientY); });
+  window.addEventListener("click", e => { if (e.target.closest("a")) return; explode(e.clientX, e.clientY); });
 
   // reveal the click hint after 5s on the page (unless already exploded)
   setTimeout(() => { const h = document.querySelector(".face-hint"); if (h && !hintGone) h.classList.add("show"); }, 5000);
