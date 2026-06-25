@@ -1,0 +1,29 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    title = content_for(:title).presence || "Andrews Peprah — Senior Software Engineer"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    - if content_for?(:description)
+      meta name="description" content=strip_tags(content_for(:description))
+    = csrf_meta_tags
+    = csp_meta_tag
+    link rel="icon" href="/icon.svg" type="image/svg+xml"
+    = stylesheet_link_tag "application"
+    style
+      ==rouge_css
+  body
+    .glow.a
+    .glow.b
+    nav.bar
+      a.brand href=root_path ANDREWS PEPRAH
+      .links
+        a href=root_path class=("active" if current_page?(root_path)) Home
+        a href=experiences_path class=("active" if controller_name == "experiences") Experience
+        a href=languages_path class=("active" if controller_name == "languages") Languages
+        a href=posts_path class=("active" if controller_name == "posts") Writing
+    main
+      = yield
+    - if controller_name == "experiences" && action_name == "show"
+      script src="/d3.v7.min.js" defer="defer"
+      script src="/globe.js" defer="defer"

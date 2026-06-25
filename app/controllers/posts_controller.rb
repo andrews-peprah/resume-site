@@ -1,12 +1,9 @@
 class PostsController < ApplicationController
   def index
-    @posts = Post.all
+    @posts = Post.published
   end
 
   def show
-    @post = Post.find(params[:slug])
-    unless @post
-      render file: Rails.root.join("public/404.html"), status: :not_found, layout: false
-    end
+    @post = Post.published.find_by!(slug: params[:slug])
   end
 end

@@ -1,0 +1,15 @@
+- content_for :title, "Experience — Andrews Peprah"
+.wrap
+  .phead
+    .ey.rise.d1
+      | / Experience
+    h2.rise.d2 Where I've built
+    p.rise.d3 Nine roles across four continents. Each opens as its own page — with the place on the globe. Pick a chapter.
+  .xp-list
+    - @experiences.each_with_index do |e, i|
+      = link_to experience_path(e), class: "xp-row rise d#{[i + 1, 5].min}" do
+        .n = format("%02d", i + 1)
+        div
+          .role = e.role
+          .co = "#{e.company} · #{e.location}"
+        .yr = e.year_label

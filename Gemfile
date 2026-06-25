@@ -1,6 +1,10 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 8.0.4"
+# SQLite database — file-backed, persisted in a Docker volume
+gem "sqlite3", ">= 2.1"
+# Slim templates
+gem "slim-rails", "~> 3.6"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use the Puma web server [https://github.com/puma/puma]

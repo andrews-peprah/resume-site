@@ -1,0 +1,42 @@
+- content_for :title, "Languages & Tools — Andrews Peprah"
+.wrap
+  .phead
+    .ey.rise.d1
+      | / Languages
+    h2.rise.d2 Spoken & spoken-to-machines
+    p.rise.d3 Human languages, the stack I've shipped in production, the full toolbox, and what I've had my hands in most recently.
+  .lang-wrap
+    .lang-group.rise.d3
+      h3 Human Languages
+      .spoken
+        - @spoken.each do |l|
+          .s
+            b = l.name
+            span = l.level_label
+    .lang-group.rise.d4
+      h3 Backend & Languages
+      .langs
+        = render partial: "languages/bar", collection: @backend, as: :l
+    .lang-group.rise.d4
+      h3 Frontend & Mobile
+      .langs
+        = render partial: "languages/bar", collection: @frontend, as: :l
+    .lang-group.rise.d5
+      h3 Data, Databases & Infrastructure
+      .langs
+        = render partial: "languages/bar", collection: @infra, as: :l
+    .lang-group.rise.d5
+      h3 Tools & Platforms
+      .toolcloud
+        - @tools.each do |l|
+          span.t = l.name
+    .lang-group.rise.d5
+      h3
+        |  Recently hands-on
+        span.dim &nbsp;— from building & deploying this site
+      .langs
+        = render partial: "languages/bar", collection: @recent, as: :l
+      p.note Bash, Docker/Compose, Nginx config, Ruby/Rails, ERB, Markdown & YAML — used live while wiring up the Headscale mesh and shipping this very page.
+  footer
+    span © 2026 Andrews Peprah
+    span Self-hosted · Ruby · C# · Linux

@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
-  layout "resume"
-
   def home
-    @latest = Post.all.first
+    @experiences = Experience.all
+    @latest = Post.published.first
+    @ticker = Language.where(category: %w[backend frontend infra]).map(&:name).uniq
   end
 end

@@ -1,0 +1,32 @@
+.wrap.hero
+  .kicker.rise.d1 Senior Software Engineer · Backend
+  h1.rise.d2
+    | Andrews
+    br
+    | Peprah
+  p.sub.rise.d3
+    b 8+ years
+    |  building scalable backends in Ruby on Rails & C#/.NET — across Ghana, Nigeria, Portugal, Mexico & Canada.
+  .cards.rise.d4
+    = link_to experiences_path, class: "card" do
+      .idx 01
+      .ct Experience
+      .cd Nine roles, each its own page →
+      .arrow →
+    = link_to languages_path, class: "card" do
+      .idx 02
+      .ct Languages
+      .cd What I speak & what I build with →
+      .arrow →
+    = link_to (@latest ? post_path(@latest) : posts_path), class: "card" do
+      .idx 03
+      .ct Writing
+      .cd Notes on building things →
+      .arrow →
+  - if @ticker.present?
+    .ticker.rise.d5
+      .track
+        - (@ticker + @ticker).each do |t|
+          span
+            |  ◆
+            b= t

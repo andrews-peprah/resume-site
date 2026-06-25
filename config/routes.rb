@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   root "pages#home"
 
-  get "writing", to: "posts#index", as: :posts
-  get "writing/:slug", to: "posts#show", as: :post
+  resources :experiences, only: %i[index show], param: :slug, path: "experience"
+  get "languages", to: "languages#index", as: :languages
+  resources :posts, only: %i[index show], param: :slug, path: "writing"
 end

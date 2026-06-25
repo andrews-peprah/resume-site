@@ -1,0 +1,40 @@
+- content_for :title, "#{@experience.role} · #{@experience.company} — Andrews Peprah"
+.wrap.xp-detail
+  .xp-main
+    = link_to "← All experience", experiences_path, class: "back rise d1"
+    .co-row.rise.d2
+      - if @experience.logo_domain.present?
+        img.logo-img src="https://logo.clearbit.com/#{@experience.logo_domain}" alt="#{@experience.company} logo" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"
+        .logo-mono style="display:none" = @experience.monogram
+      - else
+        .logo-mono = @experience.monogram
+      div
+        .co-big = @experience.company
+        .co-sub = @experience.location
+    h1.rise.d2 = @experience.role
+    .meta.rise.d3 = @experience.year_label
+    p.lead.rise.d3 = @experience.summary
+    .chips.rise.d4
+      - Array(@experience.stack).each do |s|
+        span.chip = s
+    ul.hl.rise.d4
+      - Array(@experience.highlights).each do |h|
+        li = h
+    .pager.rise.d5
+      - if @prev
+        = link_to experience_path(@prev) do
+          span.lbl ← Previous
+          span.nm = @prev.company
+      - else
+        span
+      - if @next
+        = link_to experience_path(@next), class: "next" do
+          span.lbl Next →
+          span.nm = @next.company
+      - else
+        span
+  .globe-panel.rise.d3
+    canvas#globe data-lat=@experience.lat data-lon=@experience.lon
+    .loc-pill
+      |  📍
+      b = @experience.location

@@ -1,0 +1,16 @@
+- content_for :title, "#{@post.title} — Andrews Peprah"
+- content_for :description, @post.description
+.wrap
+  article.article
+    p.back.rise.d1
+      = link_to "← Writing", posts_path
+    h1.rise.d2 = @post.title
+    .meta.rise.d2
+      time datetime=@post.published_on&.iso8601 = @post.long_date
+      |  ·
+      = " #{@post.reading_minutes} min read"
+    .prose.rise.d3
+      = @post.html
+    .article-foot
+      = link_to "← All writing", posts_path
+      = link_to "Résumé →", root_path

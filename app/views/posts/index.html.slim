@@ -1,0 +1,18 @@
+- content_for :title, "Writing — Andrews Peprah"
+.wrap
+  .phead
+    .ey.rise.d1
+      | / Writing
+    h2.rise.d2 Notes on building things
+    p.rise.d3 Engineering write-ups, infrastructure experiments, and the occasional debugging war story.
+  - if @posts.empty?
+    p.note style="margin-top:30px" No posts yet — check back soon.
+  - else
+    ul.post-list
+      - @posts.each do |post|
+        li
+          = link_to post_path(post) do
+            span.pd = post.long_date
+            span.pt = post.title
+            span.px = post.description
+            span.pm = "#{post.reading_minutes} min read"

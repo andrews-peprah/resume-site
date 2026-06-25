@@ -36,6 +36,8 @@ services:
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}       # set in ~/local/.env
       - RAILS_LOG_TO_STDOUT=1
       - RAILS_SERVE_STATIC_FILES=1               # Rails serves its own assets (no nginx in-container)
+    volumes:
+      - site-storage:/rails/storage              # SQLite DB persists here (new writings survive redeploys)
     depends_on: [tailscale]
     restart: unless-stopped
 
@@ -45,6 +47,7 @@ networks:
 
 volumes:
   tailscale-state:
+  site-storage:
   # The old WordPress volumes are intentionally left out of the active stack.
   # They are NOT deleted — keep them until you're satisfied, then prune:
   #   docker volume rm local_wp-data local_db-data
