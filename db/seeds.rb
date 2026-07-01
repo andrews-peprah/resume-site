@@ -168,33 +168,9 @@ projects = [
     year_label: "2026",
     stack: [ "React", "Vite", "TypeScript", "SaaS" ],
     summary: "My own product — a dashboard to track and manage SaaS subscriptions: plans, renewals and spend in one place, so nothing bills you by surprise.",
-    url: "https://tierguard.com" },
-  { slug: "resume-site", position: 2, name: "This Résumé Site",
-    tagline: "Interactive Rails site with a d3 globe & particle portrait",
-    year_label: "2026",
-    stack: [ "Rails 8", "Slim", "SQLite", "d3-geo", "Canvas" ],
-    summary: "The site you're on — a full-width Rails app with DB-backed content, an animated d3-geo globe per role, and a click-to-explode particle portrait. Self-hosted over my own mesh.",
-    url: "https://andrewspeprah.com", source_url: "https://github.com/andrews-peprah/resume-site" },
-  { slug: "self-hosted-mesh", position: 3, name: "Self-Hosted Private Network",
-    tagline: "Headscale + Tailscale mesh with a custom DERP relay",
-    year_label: "2026",
-    stack: [ "Headscale", "Tailscale", "Docker", "Nginx Proxy Manager", "Linux" ],
-    summary: "A private WireGuard mesh across a home server and a VPS — my own control plane (Headscale), a self-hosted DERP relay, and NPM for TLS. Home services reach the internet with zero open ports at home." },
-  { slug: "fleet-reports", position: 4, name: "Fleet Analytics & Reports",
-    tagline: "Big-data reporting for vehicle tracking",
-    year_label: "2024 — Present",
-    stack: [ "Ruby on Rails", "Angular", "Elasticsearch", "Big Data" ],
-    summary: "Data-driven reports for a multi-tenant fleet-tracking platform at PosiTrace — turning large telemetry datasets into operational insight." },
-  { slug: "crowdsource-ml", position: 5, name: "Crowd-Sourced Data Platform",
-    tagline: "Human-in-the-loop data collection for ML",
-    year_label: "2021 — 2024",
-    stack: [ "C#", ".NET", "React", "Elasticsearch" ],
-    summary: "Backend systems at Defined.ai to collect, enrich and structure crowd-sourced data that trains machine-learning models — with full CI/CD and observability." },
-  { slug: "geofence", position: 6, name: "GeoFence Microservice",
-    tagline: "Location-based geofencing service",
-    year_label: "2018",
-    stack: [ "Node.js", "Express", "PostgreSQL", "AWS" ],
-    summary: "A microservice for defining geographic boundaries and emitting enter/exit events, powering location-aware features at Walulel." }
+    url: "https://tierguard.com" }
 ]
+# Keep the Projects list curated — drop any projects no longer seeded.
+Project.where.not(slug: projects.map { |a| a[:slug] }).destroy_all
 projects.each { |a| Project.find_or_initialize_by(slug: a[:slug]).update!(a) }
 puts "Seeded #{Project.count} projects"
