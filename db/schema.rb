@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_25_000003) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_25_000004) do
   create_table "experiences", force: :cascade do |t|
     t.integer "position", default: 0, null: false
     t.string "slug", null: false
@@ -53,5 +53,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_25_000003) do
     t.datetime "updated_at", null: false
     t.index ["published_on"], name: "index_posts_on_published_on"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.string "name", null: false
+    t.string "tagline"
+    t.string "year_label"
+    t.text "summary"
+    t.text "stack"
+    t.string "url"
+    t.string "source_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["position"], name: "index_projects_on_position"
+    t.index ["slug"], name: "index_projects_on_slug", unique: true
   end
 end

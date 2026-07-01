@@ -1,0 +1,29 @@
+- content_for :title, "Projects — Andrews Peprah"
+.wrap
+  .phead
+    .ey.rise.d1
+      | / Projects
+    h2.rise.d2 Things I've built
+    p.rise.d3 A few systems and side-builds — from geospatial microservices to the self-hosted mesh that serves this very page.
+  .proj-grid
+    - @projects.each_with_index do |p, i|
+      .proj-card class="rise d#{[i + 1, 5].min}"
+        .proj-top
+          .n = format("%02d", i + 1)
+          .yr = p.year_label
+        .pname = p.name
+        .ptag = p.tagline
+        .psum = p.summary
+        - if p.stack.present?
+          .pstack
+            - p.stack.each do |s|
+              span.chip = s
+        - if p.url.present? || p.source_url.present?
+          .plinks
+            - if p.url.present?
+              = link_to "Visit ↗", p.url, target: "_blank", rel: "noopener", class: "plink primary"
+            - if p.source_url.present?
+              = link_to "Source ↗", p.source_url, target: "_blank", rel: "noopener", class: "plink"
+  footer
+    span © 2026 Andrews Peprah
+    span Self-hosted · Ruby · C# · Linux

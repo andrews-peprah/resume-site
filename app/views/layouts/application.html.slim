@@ -20,6 +20,7 @@ html lang="en"
       .links
         a href=root_path class=("active" if current_page?(root_path)) Home
         a href=experiences_path class=("active" if controller_name == "experiences") Experience
+        a href=projects_path class=("active" if controller_name == "projects") Projects
         a href=languages_path class=("active" if controller_name == "languages") Languages
         a href=posts_path class=("active" if controller_name == "posts") Writing
     main
