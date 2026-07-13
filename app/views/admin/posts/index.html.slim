@@ -1,0 +1,35 @@
+- content_for :title, "Posts — Admin"
+.phead
+  .ey
+    | / Writing
+  h2 Posts
+  .actions.headactions
+    = link_to "+ New post", new_admin_post_path, class: "btn"
+- if @posts.empty?
+  p.note No posts yet.
+- else
+  table.admintable
+    thead
+      tr
+        th Title
+        th Slug
+        th Date
+        th Status
+        th.right Actions
+    tbody
+      - @posts.each do |post|
+        tr
+          td
+            = post.title.presence || "(untitled)"
+          td
+            code = post.slug
+          td = post.long_date
+          td
+            - if post.published
+              span.badge.ok Published
+            - else
+              span.badge.draft Draft
+          td.right
+            = link_to "View", post_path(post), target: "_blank", class: "act"
+            = link_to "Edit", edit_admin_post_path(post), class: "act"
+            = button_to "Delete", admin_post_path(post), method: :delete, class: "act danger", form: { onsubmit: "return confirm('Delete this post? This cannot be undone.');" }

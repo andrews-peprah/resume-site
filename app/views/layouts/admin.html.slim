@@ -1,0 +1,25 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    title = content_for(:title).presence || "Admin — Andrews Peprah"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    meta name="robots" content="noindex, nofollow"
+    = csrf_meta_tags
+    = csp_meta_tag
+    link rel="icon" href="/icon.svg" type="image/svg+xml"
+    = stylesheet_link_tag "application"
+  body.admin data-page="admin/#{controller_name}/#{action_name}"
+    nav.bar
+      a.brand href=admin_posts_path ADMIN
+      .links
+        a href=admin_posts_path class=("active" if controller_name == "posts") Posts
+        a href=posts_path target="_blank" View site ↗
+        = button_to "Sign out", logout_path, method: :delete, class: "linkbtn"
+    main
+      .wrap.adminwrap
+        - if flash[:notice]
+          .flash.ok = flash[:notice]
+        - if flash[:alert]
+          .flash.err = flash[:alert]
+        = yield

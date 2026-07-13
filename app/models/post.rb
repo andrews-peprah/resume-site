@@ -11,6 +11,14 @@ class Post < ApplicationRecord
   scope :published, -> { where(published: true) }
   default_scope { order(published_on: :desc, created_at: :desc) }
 
+  # Auto-derive a slug from the title when the admin leaves it blank.
+  before_validation :ensure_slug
+
+  validates :title, presence: true
+  validates :slug, presence: true, uniqueness: true,
+                   format: { with: /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/,
+                             message: "must be lowercase words separated by hyphens" }
+
   def to_param
     slug
   end
@@ -39,5 +47,14 @@ class Post < ApplicationRecord
       lax_spacing: true,
       no_intra_emphasis: true
     )
+  end
+
+  private
+
+  def ensure_slug
+    return if slug.present?
+    return if title.blank?
+
+    self.slug = title.parameterize
   end
 end

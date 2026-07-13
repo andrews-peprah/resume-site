@@ -1,0 +1,15 @@
+- content_for :title, "Sign in — Admin"
+.wrap.adminwrap
+  .phead
+    .ey
+      | / Admin
+    h2 Sign in
+  = form_with url: login_path, method: :post, class: "adminform card" do |f|
+    .field
+      = f.label :email, "Email"
+      = f.email_field :email, autocomplete: "username", autofocus: true, required: true
+    .field
+      = f.label :password, "Password"
+      = f.password_field :password, autocomplete: "current-password", required: true
+    .actions
+      = f.submit "Sign in", class: "btn"

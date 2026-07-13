@@ -162,15 +162,44 @@ end
 puts "Seeded #{Post.count} posts"
 
 # ---------------------------------------------------------------- Projects
+# Only projects with a live link belong here — the list is a set of things
+# someone can actually go and use.
 projects = [
   { slug: "tierguard", position: 1, name: "TierGuard",
     tagline: "SaaS subscription management dashboard",
     year_label: "2026",
     stack: [ "React", "Vite", "TypeScript", "SaaS" ],
     summary: "My own product — a dashboard to track and manage SaaS subscriptions: plans, renewals and spend in one place, so nothing bills you by surprise.",
-    url: "https://tierguard.com" }
-]
-# Keep the Projects list curated — drop any projects no longer seeded.
+    url: "https://tierguard.com" },
+  { slug: "menuluup", position: 2, name: "MenuLuup",
+    tagline: "Digital menus for restaurants",
+    year_label: "2026",
+    stack: [ "Ruby on Rails", "Hotwire", "PostgreSQL", "SaaS" ],
+    summary: "My own product — restaurants publish a clean, always-current digital menu customers reach by QR or link, no printing or reprinting when prices and dishes change.",
+    url: "https://menuluup.com" }
+].select { |a| a[:url].to_s.strip.present? }
+# Keep the Projects list curated — drop any project not seeded above (which,
+# by the filter, means anything without a live link).
 Project.where.not(slug: projects.map { |a| a[:slug] }).destroy_all
 projects.each { |a| Project.find_or_initialize_by(slug: a[:slug]).update!(a) }
 puts "Seeded #{Project.count} projects"
+
+# ------------------------------------------------------------------- Admin
+# Single admin account for the posts back-office. Set ADMIN_EMAIL and
+# ADMIN_PASSWORD in the environment; the password is only applied on first
+# creation (or when ADMIN_RESET_PASSWORD=true) so re-seeding won't clobber a
+# password you've since changed.
+admin_email = ENV["ADMIN_EMAIL"].to_s.strip.downcase
+admin_password = ENV["ADMIN_PASSWORD"].to_s
+if admin_email.present? && admin_password.present?
+  admin = AdminUser.find_or_initialize_by(email: admin_email)
+  if admin.new_record? || ENV["ADMIN_RESET_PASSWORD"] == "true"
+    admin.password = admin_password
+    admin.save!
+    puts "Seeded admin user #{admin_email}"
+  else
+    puts "Admin user #{admin_email} already exists (password left unchanged)"
+  end
+else
+  puts "Skipped admin seed (set ADMIN_EMAIL and ADMIN_PASSWORD to create one)"
+end

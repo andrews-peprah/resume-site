@@ -8,4 +8,14 @@ Rails.application.routes.draw do
   resources :projects, only: %i[index], path: "projects"
   get "languages", to: "languages#index", as: :languages
   resources :posts, only: %i[index show], param: :slug, path: "writing"
+
+  # --- Admin ---------------------------------------------------------------
+  get  "login",  to: "sessions#new",     as: :login
+  post "login",  to: "sessions#create"
+  delete "logout", to: "sessions#destroy", as: :logout
+
+  namespace :admin do
+    root to: "posts#index"
+    resources :posts, param: :id
+  end
 end

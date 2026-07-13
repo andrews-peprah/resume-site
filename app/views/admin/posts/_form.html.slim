@@ -1,0 +1,31 @@
+= form_with model: [:admin, post], class: "adminform card" do |f|
+  - if post.errors.any?
+    .flash.err
+      strong = pluralize(post.errors.count, "error")
+      |  prevented saving:
+      ul
+        - post.errors.full_messages.each do |msg|
+          li = msg
+  .field
+    = f.label :title
+    = f.text_field :title, autofocus: true, required: true
+  .field
+    = f.label :slug
+    = f.text_field :slug, placeholder: "auto-generated from title if blank"
+    .hint Lowercase words separated by hyphens. Used in the URL (/writing/your-slug).
+  .field
+    = f.label :description, "Description / excerpt"
+    = f.text_area :description, rows: 2
+  .field
+    = f.label :body, "Body (Markdown)"
+    = f.text_area :body, rows: 20, class: "mono"
+  .fieldrow
+    .field.inline
+      = f.check_box :published
+      = f.label :published, "Published"
+    .field
+      = f.label :published_on, "Published on"
+      = f.date_field :published_on
+  .actions
+    = f.submit(post.persisted? ? "Save changes" : "Create post", class: "btn")
+    = link_to "Cancel", admin_posts_path, class: "btn ghost"
