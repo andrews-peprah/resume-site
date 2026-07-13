@@ -12,7 +12,7 @@ gem "puma", ">= 5.0"
 
 # Markdown rendering for blog posts + syntax highlighting
 gem "redcarpet", "~> 3.6"
-gem "rouge", "~> 4.2"
+gem "rouge", "~> 5.0"
 
 # Password hashing for the admin login (has_secure_password)
 gem "bcrypt", "~> 3.1"
