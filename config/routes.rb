@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   get "languages", to: "languages#index", as: :languages
   resources :posts, only: %i[index show], param: :slug, path: "writing"
 
+  # --- Play: 3D pong + comment wall ---------------------------------------
+  get  "play",         to: "play#index",   as: :play
+  post "play/comment", to: "play#comment", as: :play_comment
+
   # --- Admin ---------------------------------------------------------------
   get  "login",  to: "sessions#new",     as: :login
   post "login",  to: "sessions#create"

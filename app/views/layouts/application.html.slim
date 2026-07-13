@@ -23,11 +23,13 @@ html lang="en"
         a href=projects_path class=("active" if controller_name == "projects") Projects
         a href=languages_path class=("active" if controller_name == "languages") Languages
         a href=posts_path class=("active" if controller_name == "posts") Writing
+        a href=play_path class=("active" if controller_name == "play") Play
     main
       = yield
     - if controller_name == "experiences" && action_name == "show"
       script src="/d3.v7.min.js" defer="defer"
       script src="/globe.js" defer="defer"
-    - if controller_name == "pages" && action_name == "home"
-      script src="/particles.js" defer="defer"
+    - if controller_name == "play"
+      script src="/three.min.js" defer="defer"
+      script src="/pong.js" defer="defer"
     script src="/tour.js" defer="defer"

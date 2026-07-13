@@ -1,0 +1,51 @@
+- content_for :title, "Play — Andrews Peprah"
+- content_for :description, "A little 3D ping-pong game, and a wall where you can leave a comment."
+.wrap.playwrap
+  .phead
+    .ey.rise.d1
+      | / Play
+    h2.rise.d2 Ping-pong &amp; a comment wall
+    p.rise.d3 A tiny 3D game built with Three.js. Beat the AI to 7 — then leave a note below.
+
+  .pong.card.rise.d3
+    .pong-hud
+      .pong-score-wrap
+        span.pong-label You
+        span#pong-score 0 : 0
+        span.pong-label AI
+      button#pong-start.btn type="button" Play
+    canvas#pong-canvas
+    p#pong-msg.pong-msg
+
+  #chat.chat
+    .chat-head
+      h3 Comment wall
+      span.chat-count = "#{@comments.size} #{'comment'.pluralize(@comments.size)}"
+
+    = form_with url: play_comment_path, method: :post, class: "chatform card" do |f|
+      - if @comment&.errors&.any?
+        .flash.err
+          ul
+            - @comment.errors.full_messages.each do |m|
+              li = m
+      = fields_for :comment, @comment do |c|
+        .chatform-row
+          = c.text_field :name, placeholder: "Your name", maxlength: Comment::MAX_NAME, required: true, autocomplete: "name"
+          .captcha
+            label for="captcha" = @captcha_question
+            input#captcha type="text" name="captcha" inputmode="numeric" pattern="[0-9]*" required="required" autocomplete="off"
+        = c.text_area :body, placeholder: "Leave a comment…", rows: 3, maxlength: Comment::MAX_BODY, required: true
+      .chatform-actions
+        span.chat-hint Be kind. Comments are public.
+        = f.submit "Post comment", class: "btn"
+
+    - if @comments.empty?
+      p.note No comments yet — be the first!
+    - else
+      ul.comment-list
+        - @comments.each do |comment|
+          li.comment
+            .comment-top
+              span.comment-name = comment.name
+              span.comment-when = comment.when_label
+            p.comment-body = comment.body

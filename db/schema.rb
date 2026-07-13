@@ -10,13 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_13_000001) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_13_000002) do
   create_table "admin_users", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body", null: false
+    t.string "ip", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_comments_on_created_at"
+    t.index ["ip"], name: "index_comments_on_ip"
   end
 
   create_table "experiences", force: :cascade do |t|
