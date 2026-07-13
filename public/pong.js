@@ -10,6 +10,7 @@
   const scoreEl = document.getElementById("pong-score");
   const msgEl = document.getElementById("pong-msg");
   const startBtn = document.getElementById("pong-start");
+  const stopBtn = document.getElementById("pong-stop");
 
   // ---- table dimensions (world units) -------------------------------------
   const TABLE_W = 20;   // x: left-right
@@ -85,7 +86,10 @@
   scene.add(ball);
 
   // ---- state --------------------------------------------------------------
-  let vx = 0, vz = 0, playing = false, scoreP = 0, scoreA = 0, targetX = 0;
+  // playing: ball is live and physics run. started: a game is in progress but
+  // may be paused (Stop) — distinguishes "paused mid-game" from "not started"
+  // and "game over".
+  let vx = 0, vz = 0, playing = false, started = false, scoreP = 0, scoreA = 0, targetX = 0;
   const MAXX = TABLE_W / 2 - PADDLE_W / 2;
 
   function resetBall(towardPlayer) {
@@ -99,19 +103,35 @@
   function setScore() { if (scoreEl) scoreEl.textContent = scoreP + " : " + scoreA; }
   function msg(t) { if (msgEl) msgEl.textContent = t || ""; }
 
+  function showStop(visible, label) {
+    if (!stopBtn) return;
+    stopBtn.hidden = !visible;
+    if (label) stopBtn.textContent = label;
+  }
+
   function startGame() {
     scoreP = 0; scoreA = 0; setScore();
     player.position.x = 0; ai.position.x = 0; targetX = 0;
     resetBall(Math.random() < 0.5);
-    playing = true;
+    playing = true; started = true;
     msg("");
     if (startBtn) startBtn.textContent = "Restart";
+    showStop(true, "Stop");
   }
 
   function endGame(playerWon) {
-    playing = false;
+    playing = false; started = false;
     msg(playerWon ? "You win! 🏆  Press Restart." : "AI wins. Press Restart to try again.");
     if (startBtn) startBtn.textContent = "Play again";
+    showStop(false);
+  }
+
+  // Stop = pause a live game; press again to resume. No-op if no game running.
+  function togglePause() {
+    if (!started) return;
+    playing = !playing;
+    if (playing) { msg(""); showStop(true, "Stop"); }
+    else { msg("Paused — press Resume to continue."); showStop(true, "Resume"); }
   }
 
   // ---- input: mouse / touch controls the near paddle X --------------------
@@ -125,6 +145,11 @@
     if (e.touches[0]) { targetX = pointerX(e.touches[0].clientX); e.preventDefault(); }
   }, { passive: false });
   if (startBtn) startBtn.addEventListener("click", startGame);
+  if (stopBtn) stopBtn.addEventListener("click", togglePause);
+  // Spacebar also toggles pause once a game is running.
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space" && started) { e.preventDefault(); togglePause(); }
+  });
 
   // ---- resize -------------------------------------------------------------
   function resize() {

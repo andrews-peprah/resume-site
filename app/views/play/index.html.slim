@@ -13,7 +13,9 @@
         span.pong-label You
         span#pong-score 0 : 0
         span.pong-label AI
-      button#pong-start.btn type="button" Play
+      .pong-controls
+        button#pong-start.btn type="button" Play
+        button#pong-stop.btn.ghost type="button" hidden="hidden" Stop
     canvas#pong-canvas
     p#pong-msg.pong-msg
 
